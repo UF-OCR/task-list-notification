@@ -1,7 +1,6 @@
 logs/
+../.idea/
 .idea/
-../.idea/inspectionProfiles/Project_Default.xml
-../.idea/vcs.xml
 .DS_Store
 Gemfile.lock
 support/config.yml
