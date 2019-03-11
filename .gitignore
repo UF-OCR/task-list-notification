@@ -1,6 +1,6 @@
 logs/
 ../.idea/
-.idea/
+.idea/*
 .DS_Store
 Gemfile.lock
 support/config.yml
