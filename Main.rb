@@ -61,7 +61,7 @@ class EmailJob
         end
 
         mail = Mail.new do
-          to 'hkoranne@ufl.edu'
+          to email
           from  config["email"]["from"]
           subject config["email"]["subject"]
           content_type 'text/html; charset=UTF-8'
