@@ -1,0 +1,16 @@
+---
+# Config Variables
+email:
+  from:
+  subject :
+  address:
+
+database:
+  username:
+  password:
+  hostname:
+  sid:
+
+queries:
+  userquery:
+  tasklistquery:
