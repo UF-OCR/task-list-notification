@@ -7,7 +7,7 @@ require 'logger'
 
 emails=[]
 task_list = []
-log = Logger.new(File.join(__dir__,"/logs/log_#{Time.now}.txt"))
+log = Logger.new(File.join(__dir__,"/logs/log_production_#{Time.now}.txt"))
 
 class EmailJob
   include Celluloid
@@ -59,7 +59,6 @@ class EmailJob
         Mail.defaults do
           delivery_method :smtp, options
         end
-
         mail = Mail.new do
           to email
           from  config["email"]["from"]
@@ -84,12 +83,16 @@ class EmailJob
           if task_list_assoc.length>0
             log.info "#{Time.now}: Preparing mail for #{ i[0] } #{ i[1] }"
             prepare_mail(task_list_assoc,i,output)
-            send_mail(i[2],output)
-            log.info "#{Time.now}: Mail sent to #{ i[2] }"
+            begin
+              send_mail(i[2].to_s,output)
+              log.info "#{Time.now}: Mail sent to #{ i[2] }"
+            rescue
+              log.error "#{Time.now}: Failed to send mail #{ i[2] }"
+            end
           else
             log.info "#{Time.now}: No task list for #{ i[0] } #{ i[1] }"
           end
-        end
+      end
 end
 
 def get_data (emails, task_list)
@@ -107,7 +110,7 @@ def get_data (emails, task_list)
   conn.logoff
 end
 
-worker_pool    = EmailJob.pool(size: 5)
+worker_pool    = EmailJob.pool(size:5)
 get_data(emails,task_list)
 emails.each do |i|
    worker_pool.process_mails(i,task_list,log)
