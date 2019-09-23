@@ -4,13 +4,37 @@
 - Task list is maintained by the OCR OnCore Development Team
 
 ## Prerequisites
-- Ruby Version 2.0 or higher
 - OnCore 15.0 or higher
 
-## Installation
-- Clone this repo into your machine.
-- Rename dummy-config.php to config.php file
-- Update your config settings in config.php file
-- Run `bundle install` to install dependencies
-- Run `ruby mail.rb` to test your application
-- After a successful test schedule batch job as per your requirements
+# docker-ruby-oracle-Oncore-task-list
+This docker images serves as an environment to execute a OCR-TASKLIST-NOTIFICATION.
+
+All the configurable variables are set up in environmental file
+
+Your environment file must contain the following variables:
+
+```
+from=
+
+subject=
+
+address=
+
+username=
+
+password=
+
+hostname=
+
+sid=
+
+userquery=
+
+log_dir=
+
+```
+
+Deploy the docker image
+1. docker pull hkoranne/ocr-task-notification:1.0
+2. docker run -p 5200:5000 --env-file {your_env_file_location} -v {desired location for logs}:/opt/data/task-list-notification/logs hkoranne/ocr-task-notification:1.0
+

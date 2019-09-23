@@ -2,5 +2,8 @@ logs/
 ../.idea/
 .idea/*
 .DS_Store
+oracle-instantclient/
+support/
 Gemfile.lock
-support/config.yml
+install-instantclient.sh
+Dockerfile
