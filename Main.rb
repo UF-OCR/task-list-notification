@@ -7,7 +7,7 @@ require 'logger'
 
 emails=[]
 task_list = []
-log = Logger.new(File.join(__dir__,"/logs/log_production_#{Time.now}.txt"))
+log = Logger.new(ENV["log_dir"],10,10240000)
 
 class EmailJob
   include Celluloid
@@ -49,8 +49,7 @@ class EmailJob
       end
 
       def send_mail(email, output)
-        config = YAML.load_file(File.join(__dir__,'/support/config.yml'))
-        options = { :address              => config["email"]["address"],
+        options = { :address              => ENV["address"],
                     :port                 => 25,
         }
 
@@ -61,8 +60,8 @@ class EmailJob
         end
         mail = Mail.new do
           to email
-          from  config["email"]["from"]
-          subject config["email"]["subject"]
+          from  ENV["from"]
+          subject ENV["subject"]
           content_type 'text/html; charset=UTF-8'
           body output
         end
@@ -96,15 +95,19 @@ class EmailJob
 end
 
 def get_data (emails, task_list)
-  config = YAML.load_file(File.join(__dir__,'/support/config.yml'))
-  conn = OCI8.new(config["database"]["username"].to_s,config["database"]["password"].to_s,"(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = #{config['database']['hostname'].to_s})(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SID = #{config['database']['sid'].to_s})))")
+  username = ENV["username"]
+  password = ENV["password"]
+  host_name = ENV["hostname"]
+  sid = ENV["sid"]
+  conn = OCI8.new(username,password,"(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = #{host_name})(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SID = #{sid})))")
+  userquery = ENV["userquery"]
+  const_object = Constant.new
+  tasklistquery = const_object.get_task_list_query
 
-  conn.exec(config["queries"]["userquery"]) do |r|
+  conn.exec(userquery) do |r|
     emails.push(r);
   end
-
-  sql_string = config["queries"]["tasklistquery"]
-  conn.exec(sql_string) do |r|
+  conn.exec(tasklistquery) do |r|
     task_list.push(r)
   end
   conn.logoff
