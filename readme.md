@@ -32,9 +32,10 @@ userquery=
 
 log_dir=
 
+tasklistquery=
+
 ```
 
 Deploy the docker image
 1. docker pull hkoranne/ocr-task-notification:1.0
 2. docker run -p 5200:5000 --env-file {your_env_file_location} -v {desired location for logs}:/opt/data/task-list-notification/logs hkoranne/ocr-task-notification:1.0
-
