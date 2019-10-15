@@ -101,8 +101,7 @@ def get_data (emails, task_list)
   sid = ENV["sid"]
   conn = OCI8.new(username,password,"(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = #{host_name})(PORT = 1521)) (CONNECT_DATA = (SERVER = DEDICATED) (SID = #{sid})))")
   userquery = ENV["userquery"]
-  const_object = Constant.new
-  tasklistquery = const_object.get_task_list_query
+  tasklistquery = ENV["tasklistquery"]
 
   conn.exec(userquery) do |r|
     emails.push(r);
