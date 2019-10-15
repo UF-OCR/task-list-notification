@@ -43,43 +43,5 @@ class Constant
   def get_output_const_3
     OUTPUT_CONST_3
   end
-
-  def get_task_list_query
-     return  "select * from
- (
- select
- distinct
- spd.PROTOCOL_NO,
- stli.task_list_name,
- task.task_id,
- task.task_name,
- task.target_date,
- case when task.owner_type='Role' Then (select LISTAGG(email_address, ';') WITHIN GROUP (ORDER BY contact_id) staff
-from
- sv_pcl_mgmt_staff
- where protocol_id=task.protocol_id and staff_role = task.staff_role and stop_date is null)
- else
- (select distinct email_address from SV_STAFF
- where staff_id=task.contact_id)
- end as staff_email,
- (select listagg (COMMUNICATION_DATE||': '||COMMUNICATION_TEXT, '; ') within group (order by COMMUNICATION_DATE) as NOTES from RV_TLI_TASK_COMMUNICATION
- where COMMUNICATION_TEXT != 'NULL value for Checklist Communication' and task_id=task.task_id) communication_text
- from
- rv_task_list_instance stli,
- rv_tli_task task,
- SV_TLI_TASK_DEPENDENCY task_dependency,
- (select task_id from RV_TLI_TASK where NA='Y' or COMPLETED_DATE is not null) complete_tasks,
- (select task_id, listagg (COMMUNICATION_DATE||': '||COMMUNICATION_TEXT, '; ') within group (order by COMMUNICATION_DATE) as NOTES from RV_TLI_TASK_COMMUNICATION where COMMUNICATION_TEXT != 'NULL value for Checklist Communication' group by TASK_ID) tcomm,
- sv_pcl_details spd
- where
- stli.task_list_id = task.task_list_id
- and complete_tasks.task_id = task_dependency.REQUIRED_TASK_ID
- and task.TASK_ID = task_dependency.TASK_ID
- and task.completed_date is null
- and task.NA = 'N'
- and task.protocol_id = spd.protocol_id
- ) taskTable
- order by target_date DESC nulls last, task_list_name asc"
-  end
-
+  
 end
