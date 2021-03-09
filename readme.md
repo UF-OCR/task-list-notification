@@ -23,7 +23,7 @@ Create a bash script task-list-notification.sh
 Include the below lines in your script
 
     #!/bin/bash
-    docker run  -p 5200:5000 --env-file {your_env_file_locations} -v {your_log_file_dir}:$log_dir hkoranne/ocr-task-notification:latest
+    docker run  -p 5200:5000 --env-file {your_env_file_locations} -v {your_log_file_dir}:$log_dir ufocr/ocr-task-notification:latest
 
 Schedule a cronjob for the bash script as per the institutions requirement.
 
@@ -50,15 +50,15 @@ The following variables and required:
         log_dir: This variable provides the location of the applications log directory
 
 ### Image variants
-`hkoranne/ocr-task-notification:latest`
+`ufocr/ocr-task-notification:latest`
 
 This image is based on the latest stable version
 
-`hkoranne/ocr-task-notification:<version>`
+`ufocr/ocr-task-notification:<version>`
 
 This image is based on the given stable version
 
-`hkoranne/ocr-task-notification:develop`
+`ufocr/ocr-task-notification:develop`
 
 This image is based on the current state and is used to test out the developments before publishing
 

@@ -6,4 +6,3 @@ oracle-instantclient/
 support/
 Gemfile.lock
 install-instantclient.sh
-Dockerfile
